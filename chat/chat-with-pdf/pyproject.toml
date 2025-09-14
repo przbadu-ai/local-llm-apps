@@ -1,0 +1,13 @@
+[project]
+name = "chat-with-pdf"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "chromadb>=0.5.23",
+    "embedchain>=0.1.128",
+    "ollama>=0.5.3",
+    "streamlit>=1.49.1",
+    "streamlit-chat>=0.1.1",
+]
