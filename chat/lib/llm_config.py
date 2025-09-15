@@ -4,28 +4,28 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file if present
 
-base_url = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
-llm_provider = os.getenv('LLM_PROVIDER', 'ollama')
-embedding_model = os.getenv('EMBEDDING_MODEL', 'nomic-embed-text')
-api_key = os.getenv('OPENAI_API_KEY', '')
+BASE_URL = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
+LLM_PROVIDER = os.getenv('LLM_PROVIDER', 'ollama')
+EMBEDDING_MODEL = os.getenv('EMBEDDING_MODEL', 'nomic-embed-text')
+API_KEY = os.getenv('OPENAI_API_KEY', '')
 
-if llm_provider == 'ollama':
+if LLM_PROVIDER == 'ollama':
     llm_model = os.getenv('LLM_MODEL', 'llama3:instruct')
 else:
     llm_model = os.getenv('LLM_MODEL', 'gpt-4-turbo')
 
 
-print(f"Using LLM Provider: {llm_provider}, Model: {llm_model}, Embedding Model: {embedding_model}")
-print(f"base_url: {base_url}")
+print(f"Using LLM Provider: {LLM_PROVIDER}, Model: {llm_model}, Embedding Model: {EMBEDDING_MODEL}")
+print(f"base_url: {BASE_URL}")
 
 class LlmConfig:
     """Helper class to initialize LLM with embedding using Ollama/OpenAI provider configuration."""
     def __init__(self):
-        self.base_url = base_url
+        self.base_url = BASE_URL
         self.model = llm_model
-        self.embed_model = embedding_model
-        self.provider = llm_provider
-        self.api_key = api_key
+        self.embed_model = EMBEDDING_MODEL
+        self.provider = LLM_PROVIDER
+        self.api_key = API_KEY
 
     def create_bot(self, db_path: str, api_key: str) -> App:
         if self.provider == "ollama":
