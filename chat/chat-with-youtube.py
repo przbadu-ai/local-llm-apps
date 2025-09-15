@@ -5,6 +5,8 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from typing import Tuple, Optional
 import re
 
+llm_config = LlmConfig()
+
 def extract_video_id(video_url: str) -> Optional[str]:
     """Extract video ID from various YouTube URL formats."""
     # Handle different YouTube URL formats
@@ -99,11 +101,14 @@ st.set_page_config(
 st.title("Chat with YouTube Video 📺")
 st.caption("This app allows you to chat with a YouTube video using Ollama (llama3:instruct)")
 
+openai_access_token = llm_config.api_key
+if not openai_access_token and llm_config.provider == "openai":
+    openai_access_token = st.text_input("OpenAI API Key", type="password")
+
 # Initialize session state
 if 'db_path' not in st.session_state:
     st.session_state.db_path = tempfile.mkdtemp()
-    llm_config = LlmConfig()
-    st.session_state.app = llm_config.create_bot(st.session_state.db_path)
+    st.session_state.app = llm_config.create_bot(st.session_state.db_path, openai_access_token)
     st.session_state.video_added = False
     st.session_state.current_video_id = None
 

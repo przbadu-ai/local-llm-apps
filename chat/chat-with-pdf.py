@@ -5,19 +5,24 @@ import streamlit as st
 from embedchain import App
 from lib.llm_config import LlmConfig
 
+llm_config = LlmConfig()
+
 # Define the embedchain_bot function
-def embedchain_bot(db_path):
-    llm_config = LlmConfig()
-    return llm_config.create_bot(db_path)
+def embedchain_bot(db_path, api_key):
+    return llm_config.create_bot(db_path, api_key)
 
 st.title("Chat with PDF")
 st.caption("This app allows you to chat with a PDF using Llama3 running locally wiht Ollama!")
+
+openai_access_token = llm_config.api_key
+if not openai_access_token and llm_config.provider == "openai":
+    openai_access_token = st.text_input("OpenAI API Key", type="password")
 
 # Create a temporary directory to store the PDF file
 db_path = tempfile.mkdtemp()
 
 # Create an instance of the embedchain App
-app = embedchain_bot(db_path)
+app = embedchain_bot(db_path, openai_access_token)
 
 # Upload a PDF file
 pdf_file = st.file_uploader("Upload a PDF file", type="pdf")

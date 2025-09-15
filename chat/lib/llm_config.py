@@ -27,7 +27,7 @@ class LlmConfig:
         self.provider = llm_provider
         self.api_key = api_key
 
-    def create_bot(self, db_path: str) -> App:
+    def create_bot(self, db_path: str, api_key: str) -> App:
         if self.provider == "ollama":
             config={
                 "llm": {"provider": "ollama", "config": {"model": self.model, "max_tokens": 250, "temperature": 0.5, "stream": True, "base_url": self.base_url}},
@@ -36,9 +36,9 @@ class LlmConfig:
             }
         else:
             config={
-                "llm": {"provider": "openai", "config": {"model": self.model, "temperature": 0.5, "api_key": self.api_key}},
+                "llm": {"provider": "openai", "config": {"model": self.model, "temperature": 0.5, "api_key": api_key}},
                 "vectordb": {"provider": "chroma", "config": {"dir": db_path}},
-                "embedder": {"provider": "openai", "config": {"api_key": self.api_key}},
+                "embedder": {"provider": "openai", "config": {"api_key": api_key}},
             }
 
         return App.from_config(config=config)
