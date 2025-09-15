@@ -1,37 +1,9 @@
 import tempfile
 import streamlit as st
-from embedchain import App
+from lib.llm_config import LlmConfig
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import Tuple, Optional
 import re
-
-def embedchain_bot(db_path: str) -> App:
-    """Initialize Embedchain bot with Ollama configuration."""
-    return App.from_config(
-        config={
-            "llm": {
-                "provider": "ollama", 
-                "config": {
-                    "model": "llama3:instruct", 
-                    "max_tokens": 250, 
-                    "temperature": 0.5, 
-                    "stream": True, 
-                    "base_url": 'http://192.168.1.173:11434'
-                }
-            },
-            "vectordb": {
-                "provider": "chroma", 
-                "config": {"dir": db_path}
-            },
-            "embedder": {
-                "provider": "ollama", 
-                "config": {
-                    "model": "nomic-embed-text", 
-                    "base_url": 'http://192.168.1.173:11434'
-                }
-            },
-        }
-    )
 
 def extract_video_id(video_url: str) -> Optional[str]:
     """Extract video ID from various YouTube URL formats."""
@@ -130,7 +102,8 @@ st.caption("This app allows you to chat with a YouTube video using Ollama (llama
 # Initialize session state
 if 'db_path' not in st.session_state:
     st.session_state.db_path = tempfile.mkdtemp()
-    st.session_state.app = embedchain_bot(st.session_state.db_path)
+    llm_config = LlmConfig()
+    st.session_state.app = llm_config.create_bot(st.session_state.db_path)
     st.session_state.video_added = False
     st.session_state.current_video_id = None
 
