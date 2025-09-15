@@ -8,7 +8,7 @@ from embedchain import App
 def embedchain_bot(db_path):
     return App.from_config(
         config={
-            "llm": {"provider": "ollama", "config": {"model": "llama3:instruct", "max_tokens": 250, "temperature": 0.5, "stream": True, "base_url": 'http://192.168.1.173:11434'}},
+            "llm": {"provider": "ollama", "config": {"model": "gpt-oss", "max_tokens": 250, "temperature": 0.5, "stream": True, "base_url": 'http://192.168.1.173:11434'}},
             "vectordb": {"provider": "chroma", "config": {"dir": db_path}},
             "embedder": {"provider": "ollama", "config": {"model": "nomic-embed-text", "base_url": 'http://192.168.1.173:11434'}},
         }
@@ -19,6 +19,7 @@ st.caption("This app allows you to chat with a PDF using Llama3 running locally 
 
 # Create a temporary directory to store the PDF file
 db_path = tempfile.mkdtemp()
+
 # Create an instance of the embedchain App
 app = embedchain_bot(db_path)
 
@@ -35,6 +36,7 @@ if pdf_file:
 
 # Ask a question about the PDF
 prompt = st.text_input("Ask a question about the PDF")
+
 # Display the answer
 if prompt:
     answer = app.chat(prompt)
