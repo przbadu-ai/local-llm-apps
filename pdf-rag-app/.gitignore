@@ -1,0 +1,6 @@
+chroma/
+data/
+!data/.gitkeep
+!data/ticket_to_ride.pdf
+__pycache__/
+.venv/
