@@ -5,8 +5,10 @@ import tempfile
 
 llm_config = LlmConfig()
 
+
 def embedchain_bot(db_path, api_key):
     return llm_config.create_bot(db_path, api_key)
+
 
 st.title("Chat with Substack Newsletter 📝")
 st.caption("This app allows you to chat with Substack newsletter using OpenAI API")
@@ -26,7 +28,7 @@ substack_url = st.text_input("Enter Substack Newsletter URL", type="default")
 
 if substack_url:
     # Add the Substack blog to the knowledge base
-    app.add(substack_url, data_type='substack')
+    app.add(substack_url, data_type="substack")
     st.success(f"Added {substack_url} to knowledge base!")
 
     # Ask a question about the Substack blog
@@ -36,3 +38,4 @@ if substack_url:
     if query:
         result = app.query(query)
         st.write(result)
+

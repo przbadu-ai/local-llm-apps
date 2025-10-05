@@ -9,16 +9,18 @@ from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file if present
 
 # Get the environment variables
-LLM_PROVIDER = os.getenv('LLM_PROVIDER', 'ollama')
-API_KEY = os.getenv('OPENAI_API_KEY', '')
-llm_model = os.getenv("LLM_MODEL", 'llama3')
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "ollama")
+API_KEY = os.getenv("OPENAI_API_KEY", "")
+llm_model = os.getenv("LLM_MODEL", "llama3")
 
-os.environ["OLLAMA_HOST"] = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
+os.environ["OLLAMA_HOST"] = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 
 # Set up the Streamlit app
 st.title("Chat with Research Papers 🔎🤖")
-st.caption(f"This app allows you to chat with arXiv research papers using {llm_model} running locally.")
+st.caption(
+    f"This app allows you to chat with arXiv research papers using {llm_model} running locally."
+)
 
 
 # Set the environment variables as needed
@@ -29,20 +31,18 @@ else:
     if not openai_access_token and LLM_PROVIDER == "openai":
         openai_access_token = st.text_input("OpenAI API Key", type="password")
 
-    model = OpenAIChat(id=llm_model, max_tokens=1024, temperature=0.9, api_key=openai_access_token)
+    model = OpenAIChat(
+        id=llm_model, max_tokens=1024, temperature=0.9, api_key=openai_access_token
+    )
 
 
 # Agent
-assistant = Agent(
-    model=model,
-    tools=[ArxivTools()]
-)
+assistant = Agent(model=model, tools=[ArxivTools()])
 
 # Get the search query from the user
-query= st.text_input("Enter the Search Query", type="default")
+query = st.text_input("Enter the Search Query", type="default")
 
 if query:
     # Search the web using the AI Assistant
     response = assistant.run(query, stream=False)
     st.write(response.content)
-
