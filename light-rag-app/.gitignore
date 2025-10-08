@@ -1,0 +1,4 @@
+.venv
+*.log
+pydantic-docs/*
+!pydantic-docs/.gitkeep
